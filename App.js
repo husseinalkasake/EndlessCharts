@@ -1,8 +1,10 @@
 import React from 'react';
 import { StyleSheet, Platform, StatusBar } from 'react-native';
+import { NativeRouter, Route, Link } from "react-router-native";
 import { Font, AppLoading } from "expo";
 import { Root } from "native-base";
-import Home from './Home';
+import Search from './views/Search';
+import FooterNav from './views/FooterNav';
 
 
 export default class App extends React.Component {
@@ -28,7 +30,10 @@ export default class App extends React.Component {
     }
     return (
       <Root styles={styles.container}>
-        <Home />
+        <NativeRouter>
+          <Route exact path="/" component={Search} />
+          <FooterNav/>
+        </NativeRouter>
       </Root>
     );
   }

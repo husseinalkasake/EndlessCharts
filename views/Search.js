@@ -1,27 +1,33 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Image } from 'react-native';
+import { StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
 // TODO: MOVE TO REDUX STORE!!
-import AlbumService from './services/album.service';
-import { Container, Header, Item, Input, Icon, Button, Text, Card, CardItem, Body, Footer, FooterTab } from 'native-base';
+import AlbumService from '../services/album.service';
+import { Container, Header, Item, Input, Icon, Button, Text, Card, CardItem, Body } from 'native-base';
 
-export default class Home extends React.Component {
+export default class Search extends React.Component {
   state = {
-    albums: []
+    input: '',
+    albums: [],
+    loading: false
   }
     
   search(input) {
-    const service = new AlbumService();
-    service.searchAlbum(input).then(res => {
+    input = input.trim();
+    if (input !== '') {
+      const service = new AlbumService();
+      this.setState({ albums: [], loading: true });
+      service.searchAlbum(input).then(res => {
         const albums = res.data.results.albummatches.album;
-        this.setState({ albums });
-      })
+        this.setState({ albums: albums, loading: false });
+      });
+    }
   }
 
   render() {
     let albumCards = [];
     this.state.albums.map((album, index) => {
       albumCards.push(
-        <Card key={index} style={styles.card}>
+        <Card key={'album_'+ index} style={styles.card}>
             <CardItem style={styles.card}>
               <Body>
                 <Text style={styles.text}>
@@ -30,44 +36,29 @@ export default class Home extends React.Component {
               </Body>
             </CardItem>
             <CardItem style={styles.card}>
-              <Image source={{uri: album.image[album.image.length - 1]['#text']}} style={styles.image}/>
+              <Image source={{uri: album.image ? album.image[album.image.length - 1]['#text']: ''}} style={styles.image}/>
             </CardItem>
           </Card>
       );
     });
+  let albumView = [<ScrollView indicatorStyle="white">{ albumCards }</ScrollView>];
     return (
       <Container style={styles.container}>
         <Header searchBar rounded style={styles.searchBar}>
             <Item style={styles.item}>
             <Icon name="search" style={styles.icon}/>
-            <Input 
+            <Input
               style={styles.input}
               placeholder="Search..."
+              value={this.state.input}
+              onChangeText={(text) => this.setState({input: text})}
               onSubmitEditing={(event) => this.search(event.nativeEvent.text)} />
             </Item>
             <Button transparent>
             <Text>Search</Text>
             </Button>
         </Header>
-        <ScrollView indicatorStyle="white">
-          { albumCards }
-        </ScrollView>
-        <Footer style={styles.card}>
-          <FooterTab style={styles.card}>
-            <Button>
-              <Icon name="home" />
-            </Button>
-            <Button>
-              <Icon name="search" />
-            </Button>
-            <Button>
-              <Icon name="fa-chart" />
-            </Button>
-            <Button>
-              <Icon name="person" />
-            </Button>
-          </FooterTab>
-        </Footer>
+        { this.state.loading ? <ActivityIndicator style={styles.activity} size="large" color="#fff" /> : albumView }
       </Container>
     );
   }
@@ -96,7 +87,8 @@ const styles = StyleSheet.create({
     card: {
       color: '#000',
       borderColor: '#000',
-      backgroundColor: '#28262f'
+      // backgroundColor: '#28262f'
+      backgroundColor: '#000'
     },
     image: {
       flex: 1,
@@ -106,5 +98,8 @@ const styles = StyleSheet.create({
     },
     text: {
       color: '#fff'
+    },
+    activity: {
+      flex: 1
     }
 });
