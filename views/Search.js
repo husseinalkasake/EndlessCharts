@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, ScrollView, Image, ActivityIndicator } from 'react-native';
+import AlbumCard from '../components/AlbumCard';
+import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 // TODO: MOVE TO REDUX STORE!!
 import AlbumService from '../services/album.service';
 import { Container, Header, Item, Input, Icon, Button, Text, Card, CardItem, Body } from 'native-base';
@@ -18,6 +19,9 @@ export default class Search extends React.Component {
       this.setState({ albums: [], loading: true });
       service.searchAlbum(input).then(res => {
         const albums = res.data.results.albummatches.album;
+        albums.map((album, index) => {
+          album.key = index;
+        });
         this.setState({ albums: albums, loading: false });
       });
     }
@@ -27,26 +31,15 @@ export default class Search extends React.Component {
     let albumCards = [];
     this.state.albums.map((album, index) => {
       albumCards.push(
-        <Card key={'album_'+ index} style={styles.card}>
-            <CardItem style={styles.card}>
-              <Body>
-                <Text style={styles.text}>
-                  { album.artist + ' - ' + album.name }
-                </Text>
-              </Body>
-            </CardItem>
-            <CardItem style={styles.card}>
-              <Image source={{uri: album.image ? album.image[album.image.length - 1]['#text']: ''}} style={styles.image}/>
-            </CardItem>
-          </Card>
+        <AlbumCard album={album} index={index} />
       );
     });
-  let albumView = [<ScrollView indicatorStyle="white">{ albumCards }</ScrollView>];
+    let albumView = [<ScrollView indicatorStyle="white">{ albumCards }</ScrollView>];
     return (
       <Container style={styles.container}>
         <Header searchBar rounded style={styles.searchBar}>
             <Item style={styles.item}>
-            <Icon name="search" style={styles.icon}/>
+            <Icon name="search" style={styles.searchIcon}/>
             <Input
               style={styles.input}
               placeholder="Search..."
@@ -81,13 +74,20 @@ const styles = StyleSheet.create({
       color: '#fff',
       backgroundColor: '#000'
     },
-    icon : {
+    searchIcon : {
         color: '#fff'
+    },
+    heartIcon: {
+      color: '#fff',
+      alignSelf: 'flex-end'
+    },
+    heartIconActive: {
+      color: '#f00',
+      alignSelf: 'flex-end'
     },
     card: {
       color: '#000',
       borderColor: '#000',
-      // backgroundColor: '#28262f'
       backgroundColor: '#000'
     },
     image: {
