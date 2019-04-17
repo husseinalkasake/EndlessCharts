@@ -31,14 +31,14 @@ export default class App extends React.Component {
       );
     }
     return (
-      <Provider store={store}>
         <Root styles={styles.container}>
+      <Provider store={store}>
           <NativeRouter>
             <Route exact path="/" component={Search} />
             <FooterNav/>
           </NativeRouter>
+          </Provider>
         </Root>
-      </Provider>
     );
   }
 }

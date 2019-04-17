@@ -12,7 +12,12 @@ class SearchComponent extends React.Component {
     albums: [],
     loading: false
   }
-    
+  componentDidUpdate (oldProps) {
+    if (oldProps !== this.props) {
+      this.setState({albums: this.props.albums});
+    }
+  }
+
   search(input) {
     input = input.trim();
     if (input !== '') {
@@ -23,7 +28,7 @@ class SearchComponent extends React.Component {
         albums.map((album, index) => {
           album.key = index;
         });
-        this.props.updateAlbums(albums);
+        this.props.updateAlbums({albums: albums});
         this.setState({ loading: false });
       });
     }
@@ -111,7 +116,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateAlbums: albums => dispatch(updateAlbums(albums))
+  updateAlbums: albums => {
+    debugger;
+    dispatch(updateAlbums(albums));
+  }
 });
 
 export default Search = connect(mapStateToProps,mapDispatchToProps)(SearchComponent);
