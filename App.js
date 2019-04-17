@@ -5,6 +5,8 @@ import { Font, AppLoading } from "expo";
 import { Root } from "native-base";
 import Search from './views/Search';
 import FooterNav from './views/FooterNav';
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
 
 
 export default class App extends React.Component {
@@ -29,12 +31,14 @@ export default class App extends React.Component {
       );
     }
     return (
-      <Root styles={styles.container}>
-        <NativeRouter>
-          <Route exact path="/" component={Search} />
-          <FooterNav/>
-        </NativeRouter>
-      </Root>
+      <Provider store={store}>
+        <Root styles={styles.container}>
+          <NativeRouter>
+            <Route exact path="/" component={Search} />
+            <FooterNav/>
+          </NativeRouter>
+        </Root>
+      </Provider>
     );
   }
 }

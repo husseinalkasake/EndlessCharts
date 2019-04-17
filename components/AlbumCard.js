@@ -1,6 +1,5 @@
 import React from 'react';
-import { StyleSheet, Image, TouchableOpacity } from 'react-native';
-// TODO: MOVE TO REDUX STORE!!
+import { StyleSheet, Image } from 'react-native';
 import { Icon, Text, Card, CardItem, Body } from 'native-base';
 
 export default class AlbumCard extends React.Component {
@@ -19,7 +18,7 @@ export default class AlbumCard extends React.Component {
                     <Icon name="heart" onPress={() => this.setState({selected: !this.state.selected})} style={this.heartStyle()}/>
                 </Body>
             </CardItem>
-            <CardItem style={styles.card}>
+            <CardItem style={styles.card} onPress={() => this.goToAlbum()}>
               <Image source={{uri: this.getImageSource()}} style={styles.image}/>
             </CardItem>
         </Card>
@@ -31,6 +30,9 @@ export default class AlbumCard extends React.Component {
   }
   heartStyle() {
     return this.state.selected ? styles.heartIconActive : styles.heartIcon;
+  }
+  goToAlbum() {
+
   }
 }
 

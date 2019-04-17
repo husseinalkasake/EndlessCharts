@@ -2,10 +2,11 @@ import React from 'react';
 import AlbumCard from '../components/AlbumCard';
 import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 // TODO: MOVE TO REDUX STORE!!
+import { connect } from 'react-redux';
 import AlbumService from '../services/album.service';
-import { Container, Header, Item, Input, Icon, Button, Text, Card, CardItem, Body } from 'native-base';
+import { Container, Header, Item, Input, Icon, Button, Text } from 'native-base';
 
-export default class Search extends React.Component {
+class SearchComponent extends React.Component {
   state = {
     input: '',
     albums: [],
@@ -22,7 +23,8 @@ export default class Search extends React.Component {
         albums.map((album, index) => {
           album.key = index;
         });
-        this.setState({ albums: albums, loading: false });
+        this.props.updateAlbums(albums);
+        this.setState({ loading: false });
       });
     }
   }
@@ -103,3 +105,13 @@ const styles = StyleSheet.create({
       flex: 1
     }
 });
+
+const mapStateToProps = state => ({
+  albums: state.albums
+});
+
+const mapDispatchToProps = dispatch => ({
+  updateAlbums: albums => dispatch(updateAlbums(albums))
+});
+
+export default Search = connect(mapStateToProps,mapDispatchToProps)(SearchComponent);
