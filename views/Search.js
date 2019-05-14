@@ -3,19 +3,18 @@ import AlbumCard from '../components/AlbumCard';
 import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
 // TODO: MOVE TO REDUX STORE!!
 import { connect } from 'react-redux';
+import { updateAlbums } from '../redux/actions';
 import AlbumService from '../services/album.service';
 import { Container, Header, Item, Input, Icon, Button, Text } from 'native-base';
 
 class SearchComponent extends React.Component {
-  state = {
-    input: '',
-    albums: [],
-    loading: false
-  }
-  componentDidUpdate (oldProps) {
-    if (oldProps !== this.props) {
-      this.setState({albums: this.props.albums});
-    }
+  constructor(props) {
+    super(props);
+    this.state = {
+      input: '',
+      albums: [],
+      loading: false
+    };
   }
 
   search(input) {
@@ -29,18 +28,18 @@ class SearchComponent extends React.Component {
           album.key = index;
         });
         this.props.updateAlbums({albums: albums});
-        this.setState({ loading: false });
+        this.setState({ loading: false, albums: albums });
       });
     }
   }
 
   render() {
     let albumCards = [];
-    this.state.albums.map((album, index) => {
-      albumCards.push(
-        <AlbumCard album={album} index={index} />
-      );
-    });
+      this.state.albums.map((album, index) => {
+        albumCards.push(
+          <AlbumCard album={album} index={index} />
+        );
+      });
     let albumView = [<ScrollView indicatorStyle="white">{ albumCards }</ScrollView>];
     return (
       <Container style={styles.container}>
@@ -117,7 +116,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateAlbums: albums => {
-    debugger;
     dispatch(updateAlbums(albums));
   }
 });
