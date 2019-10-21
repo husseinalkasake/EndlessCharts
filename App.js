@@ -1,7 +1,8 @@
 import React from 'react';
 import { StyleSheet, Platform, StatusBar } from 'react-native';
 import { NativeRouter, Route, Link } from "react-router-native";
-import { Font, AppLoading } from "expo";
+import { AppLoading } from "expo";
+import * as Font from 'expo-font';
 import { Root } from "native-base";
 import Search from './views/Search';
 import FooterNav from './views/FooterNav';
