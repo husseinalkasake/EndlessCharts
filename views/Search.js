@@ -1,7 +1,6 @@
 import React from 'react';
 import AlbumCard from '../components/AlbumCard';
 import { StyleSheet, ScrollView, ActivityIndicator } from 'react-native';
-// TODO: MOVE TO REDUX STORE!!
 import { connect } from 'react-redux';
 import { updateAlbums } from '../redux/actions';
 import AlbumService from '../services/album.service';

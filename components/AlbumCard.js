@@ -1,14 +1,18 @@
 import React from 'react';
-import { StyleSheet, Image } from 'react-native';
+import { StyleSheet, Image, TouchableHighlight } from 'react-native';
+import AlbumService from '../services/album.service';
+import { connect } from 'react-redux';
+import { updateAlbum } from '../redux/actions';
 import { Icon, Text, Card, CardItem, Body } from 'native-base';
 
-export default class AlbumCard extends React.Component {
+class AlbumCardComponent extends React.Component {
   state = {
     selected: false
   }
 
   render() {
     return (
+      <TouchableHighlight onPress={() => this.goToAlbum()}>
         <Card key={'album_'+ this.props.index} style={styles.card}>
             <CardItem style={styles.card}>
                 <Body>
@@ -18,10 +22,11 @@ export default class AlbumCard extends React.Component {
                     <Icon name="heart" onPress={() => this.setState({selected: !this.state.selected})} style={this.heartStyle()}/>
                 </Body>
             </CardItem>
-            <CardItem style={styles.card} onPress={() => this.goToAlbum()}>
+            <CardItem style={styles.card}>
               <Image source={{uri: this.getImageSource()}} style={styles.image}/>
             </CardItem>
         </Card>
+      </TouchableHighlight>
     );
   }
 
@@ -32,7 +37,13 @@ export default class AlbumCard extends React.Component {
     return this.state.selected ? styles.heartIconActive : styles.heartIcon;
   }
   goToAlbum() {
-
+    const service = new AlbumService();
+    service.getInfo(this.props.album.artist, this.props.album.name).then(res => {
+      const album = res.data.album;
+      if(album !== null) {
+        this.props.updateAlbum(album);
+      }
+    });
   }
 }
 
@@ -60,3 +71,11 @@ const styles = StyleSheet.create({
       color: '#fff'
     }
 });
+
+const mapDispatchToProps = dispatch => ({
+  updateAlbum: album => {
+    dispatch(updateAlbum(album));
+  }
+});
+
+export default AlbumCard = connect(null,mapDispatchToProps)(AlbumCardComponent);
