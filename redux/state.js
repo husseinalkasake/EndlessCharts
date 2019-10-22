@@ -1,4 +1,5 @@
 export default INITIAL_STATE = {
     albums: [],
-    album: null
+    album: null,
+    currPage: 'search'
 };

@@ -1,6 +1,4 @@
-import { combineReducers } from 'redux';
-import { albumReducer } from './album.reducer';
+// import { combineReducers } from 'redux';
+import { rootReducer } from './root.reducer';
 
-export default rootReducer = combineReducers({
-    albumReducer
-});
+export default rootReducer;

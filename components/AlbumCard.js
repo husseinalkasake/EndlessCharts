@@ -38,7 +38,10 @@ class AlbumCardComponent extends React.Component {
   }
   goToAlbum() {
     const service = new AlbumService();
-    service.getInfo(this.props.album.artist, this.props.album.name).then(res => {
+    const albumExists = this.props.storeAlbum ? (
+      this.props.album.artist === this.props.storeAlbum.artist &&
+      this.props.album.name === this.props.storeAlbum.name) : false;
+    !albumExists && service.getInfo(this.props.album.artist, this.props.album.name).then(res => {
       const album = res.data.album;
       if(album !== null) {
         this.props.updateAlbum(album);
@@ -72,10 +75,14 @@ const styles = StyleSheet.create({
     }
 });
 
+const mapStateToProps = state => ({
+  storeAlbum: state.album
+});
+
 const mapDispatchToProps = dispatch => ({
   updateAlbum: album => {
     dispatch(updateAlbum(album));
   }
 });
 
-export default AlbumCard = connect(null,mapDispatchToProps)(AlbumCardComponent);
+export default AlbumCard = connect(mapStateToProps,mapDispatchToProps)(AlbumCardComponent);

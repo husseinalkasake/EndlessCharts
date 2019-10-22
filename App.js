@@ -1,14 +1,11 @@
 import React from 'react';
 import { StyleSheet, Platform, StatusBar } from 'react-native';
-import { NativeRouter, Route, Link } from "react-router-native";
 import { AppLoading } from "expo";
 import * as Font from 'expo-font';
 import { Root } from "native-base";
-import Search from './views/Search';
-import Album from './views/Album';
-import FooterNav from './views/FooterNav';
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
+import Navigator from './views/Navigator';
 
 
 export default class App extends React.Component {
@@ -35,11 +32,7 @@ export default class App extends React.Component {
     return (
       <Root styles={styles.container}>
         <Provider store={store}>
-          <NativeRouter>
-            <Route exact path="/" component={Search} />
-            <Route path="/album" component={Album} />
-            <FooterNav/>
-          </NativeRouter>
+          <Navigator />
         </Provider>
       </Root>
     );
